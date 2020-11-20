@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Algo_DS.Models;
 
 namespace Algo_DS
 {
@@ -15,6 +17,10 @@ namespace Algo_DS
             Console.WriteLine("Anagrams: " + GroupAnagrams(new List<string>() { "foo", "ofo", "tac", "cat" }).Count);
             Console.WriteLine("LongestSubstringWithoutDuplicate: " + LongestSubstringWithoutDuplicate("clementisacap"));
             Console.WriteLine("UnderScorify : " + UnderscorifySubstring("testthis is a testtest to see if testtesttest is works", "test"));
+            Console.WriteLine("Two Sum :" + SumOfTwo(new int[] { 10, 15, 3, 7 }, 17));
+
+            Console.WriteLine("ProductExceptItSelf" + ProductOfOtherThanCurrent(new int[] { 1, 2, 3, 4, 5 }));
+            Console.ReadLine();
         }
 
         public static bool PalindromeCheck(string str)
@@ -197,5 +203,98 @@ namespace Algo_DS
                 finalChars.Add(str.Substring(stringIndex));
             return String.Join("", finalChars);
         }
+
+        #region Daily Coding Problem
+
+       // Given a list of numbers and a number k, return whether any two numbers from the list add up to k.
+
+       // For example, given[10, 15, 3, 7] and k of 17, return true since 10 + 7 is 17.
+
+        public static bool SumOfTwo(int[] input, int k)
+        {
+            HashSet<int> set = new HashSet<int>();
+            foreach(int n in input)
+            {
+                int comp = k - n;
+                if(set.Contains(n))
+                {
+                    return true;
+                }
+                else
+                {
+                    set.Add(comp);
+                }
+            }
+
+            return false;
+        }
+
+      //  Given an array of integers, return a new array such that each element at index i of the new array is the product of all the numbers in the original array except the one at i.
+
+      //  For example, if our input was[1, 2, 3, 4, 5], the expected output would be[120, 60, 40, 30, 24]. If our input was [3, 2, 1], the expected output would be[2, 3, 6].
+
+        public static int[] ProductOfOtherThanCurrent(int[] input)
+        {
+            int[] result = new int[input.Length];
+            result[0] = 1;
+            for(int i = 1;i<input.Length;i++)
+            {
+                result[i] = input[i - 1] * result[i - 1];
+            }
+            int r = 1;
+            for(int i = input.Length - 1;i>=0;i--)
+            {
+                result[i] = r * result[i];
+                r = r * input[i];
+            }
+            return result;
+        }
+
+       // Given the root to a binary tree, implement serialize(root), which serializes the tree into a string,
+       // and deserialize(s), which deserializes the string back into the tree.
+
+        public static string Serialize(TreeNode tree)
+        {
+            StringBuilder sb = new StringBuilder();
+            PreOrderTree(tree, sb);
+            return sb.ToString().Trim(',');
+        }
+
+        public static void PreOrderTree(TreeNode tree, StringBuilder sb)
+        {
+            if(tree == null)
+            {
+                sb.Append("#,");
+                return;
+            }
+            sb.Append(tree.value);
+            sb.Append(',');
+            PreOrderTree(tree.left, sb);
+            PreOrderTree(tree.right, sb);
+        }
+
+        public static TreeNode Deserialize(string sb)
+        {
+            string[] nodes = sb.Split(',');
+            int position = 0;
+            return DeserializeFromArray(nodes, ref position);
+        }
+
+        public static TreeNode DeserializeFromArray(string[] nodes, ref int position)
+        {
+            if(nodes[position] == "#")
+            {
+                position++;
+                return null;
+            }
+            var node = new TreeNode(int.Parse(nodes[position++]));
+            node.left = DeserializeFromArray(nodes, ref position);
+            node.right = DeserializeFromArray(nodes, ref position);
+            return node;
+        }
+
+
+        #endregion
+
     }
 }
