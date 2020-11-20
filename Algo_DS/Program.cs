@@ -20,6 +20,7 @@ namespace Algo_DS
             Console.WriteLine("Two Sum :" + SumOfTwo(new int[] { 10, 15, 3, 7 }, 17));
 
             Console.WriteLine("ProductExceptItSelf" + ProductOfOtherThanCurrent(new int[] { 1, 2, 3, 4, 5 }));
+            Console.WriteLine("First Missing Positive Number: " + FirstMissingPositiveNumber(new int[] { 1, 2, 3, 4, 5 }));
             Console.ReadLine();
         }
 
@@ -293,7 +294,41 @@ namespace Algo_DS
             return node;
         }
 
+        //Given an array of integers, find the first missing positive integer in linear time and constant space.
+        //In other words, find the lowest positive integer that does not exist in the array. The array can contain duplicates and negative numbers as well.
 
+        //For example, the input[3, 4, -1, 1] should give 2. The input[1, 2, 0] should give 3.
+
+        public static int FirstMissingPositiveNumber(int[] input)
+        {
+            int n = input.Length;
+            for(int i = 0; i < n; i++)
+            {
+                if(input[i] <= 0 || input[i] > n)
+                {
+                    input[i] = n + 1;
+                }
+            }
+
+            for(int i = 0; i < n; i++)
+            {
+                int num = Math.Abs(input[i]);
+                if (num > n)
+                    continue;
+                num--;
+                if(input[num] > 0)
+                {
+                    input[num] = -1 * input[num];
+                }
+            }
+
+            for(int i = 0; i < n; i++)
+            {
+                if (input[i] >= 0)
+                    return i + 1;
+            }
+            return n + 1;
+        }
         #endregion
 
     }
