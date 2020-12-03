@@ -21,6 +21,11 @@ namespace Algo_DS
 
             Console.WriteLine("ProductExceptItSelf" + ProductOfOtherThanCurrent(new int[] { 1, 2, 3, 4, 5 }));
             Console.WriteLine("First Missing Positive Number: " + FirstMissingPositiveNumber(new int[] { 1, 2, 3, 4, 5 }));
+
+            Console.WriteLine("Bubble Sort : " + BubbleSort(new int[] { 3, 2, 5, 8, 1, -1 }));
+            Console.WriteLine("Insertion Sort : " + InsertionSort(new int[] { 3, 2, 5, 8, 1, -1 }));
+            Console.WriteLine("Selection Sort : " + SelectionSort(new int[] { 3, 2, 5, 8, 1, -1 }));
+            Console.WriteLine("Get Max : " + GetMax(670));
             Console.ReadLine();
         }
 
@@ -205,6 +210,50 @@ namespace Algo_DS
             return String.Join("", finalChars);
         }
 
+        public static int GetMax(int num)
+        {
+            int max = int.MinValue;
+            if (num == 0)
+                return 5 * 10;
+            int negative = num / Math.Abs(num);
+            string n = Convert.ToString(Math.Abs(num));
+            for(int i = 0; i <= n.Length; i++)
+            {
+                string temp = n;
+                int newval = Convert.ToInt32(temp.Insert(i, "5"));
+                if(newval * negative > max)
+                {
+                    max = newval * negative; 
+                }
+            }
+
+            return max;
+        }
+
+        public static int GetPattern(string S)
+        {
+            int aCount = 0;
+            int bCount = 0;
+            int dCount = 0;
+            foreach(char c in S)
+            {
+                if(c == 'A')
+                {
+                    aCount++;
+                    if(bCount > dCount)
+                    {
+                        dCount++;
+                    }
+                }
+                else
+                {
+                    bCount++;
+                }
+            }
+            return Math.Min(aCount, Math.Min(bCount, dCount));
+
+        }
+
         #region Daily Coding Problem
 
        // Given a list of numbers and a number k, return whether any two numbers from the list add up to k.
@@ -331,5 +380,66 @@ namespace Algo_DS
         }
         #endregion
 
+
+        #region Sorting
+        public static int[] BubbleSort(int[] input)
+        {
+            int counter = 0;
+            bool sorted = false;
+            while (!sorted)
+            {
+                sorted = true;
+                for(int i = 0;i<input.Length - 1 - counter; i++)
+                {
+                    if(input[i] > input[i + 1])
+                    {
+                        sorted = false;
+                        Swap(input, i, i + 1);
+                    }
+                }
+                counter++;
+            }
+            return input;
+        }
+
+        public static int[] InsertionSort(int[] input)
+        {
+           for(int i = 1; i < input.Length; i++)
+            {
+                int j = i;
+                while(j > 0 && input[j] < input[j - 1])
+                {
+                    Swap(input, j, j - 1);
+                    j--;
+                }
+            }
+            return input;
+        }
+        public static int[] SelectionSort(int[] input)
+        {
+            int currentIndex = 0;
+            while(currentIndex < input.Length)
+            {
+                int smallestIndex = currentIndex;
+                for(int i = currentIndex + 1; i < input.Length; i++)
+                {
+                    if (input[smallestIndex] > input[i])
+                    {
+                        smallestIndex = i;
+                    }
+                }
+                Swap(input, currentIndex, smallestIndex);
+                currentIndex++;
+            }
+            return input;
+        }
+        public static void Swap(int[] input, int i, int j)
+        {
+            int temp = input[i];
+            input[i] = input[j];
+            input[j] = temp;
+        }
+
+        #endregion
     }
 }
